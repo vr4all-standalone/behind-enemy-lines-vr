@@ -1,0 +1,11 @@
+# BEL Wider-view reticle size and player colors — 2026-10-30
+
+The user accepted the previous reticle controls and warning update, then requested a 30% larger regular/100% Wider-view reticle and red P2 rather than both players using green.
+
+The world marker's base artwork scale is multiplied by 1.30 for both In-game and Custom modes. The existing minimum-size percentage and shrink-distance policy, actual 3D target, stereo depth and saved choices remain intact. No schema migration or settings reset is needed. Wider view off retains the full original native HUD and sights.
+
+In-game artwork is colored by logical player: P1 green, P2 red, independently of hand assignment. The red/green channel extrema select the correct player shade even if the captured canonical mesh came from the other player. Blue, alpha, neutral and yellow components are retained. The shader uniform is set on every draw so P2 cannot affect the next P1 draw. Custom retains the shared red-P1/blue-P2 convention; None and independent Laser behavior are unchanged.
+
+Production GL regressions render the 100% native marker at the panel reference distance and measure its pixel footprint. The old base scale fails that regression. Both source palettes, both logical players, both physical hands and returning from P2 to P1 are exercised. The original shared-green implementation fails the player-color test; an intermediate simple channel swap fails the red-source test. The final renderer is checked by the full native/GL suite as recorded in the accompanying overseer report. Existing settings persistence/migration, targeting, HUD, hand transitions, firing effects, Continue and launcher checks remain in the regression suite.
+
+Delivery records, exact command exits, source and artifact hashes, device status and limitations are in `overseer/changes/2026-10-30-bel-reticle-size-colors/`. This is a BEL-specific artwork correction; no shared control or settings contract changes. Existing haptic/recoil, warning crop, native game rules, accepted world settings and other mods remain unchanged. No GitHub publication is authorized or performed. Fresh visual acceptance, PCVR physical play, Quest 3 play and sustained performance measurements are separate from software/build/install checks.

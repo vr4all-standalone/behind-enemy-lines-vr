@@ -1,0 +1,9 @@
+# BEL HUD size — 2026-10-30
+
+The user requests an independent HUD size option across applicable managed games, explicitly restricted to large/Wider view. Small/Original view must keep the normal HUD size for now.
+
+BEL adds HUD size immediately after Panel distance:100% default,50–200% in5% clamped steps. It saves `hud_size` independently; missing/invalid/nonfinite/out-of-range values use100%. Reset to defaults uses the existing VR-settings save path and restores100%, including retaining the accepted compiled native-reticle maximum130% and other game-specific defaults. Toggling Wider view never overwrites the saved HUD value.
+
+Only verified active gameplay with Wider view On applies the multiplier. The known original status mesh and cropped native foreground/warning/ammo layer scale together in physical XY about the existing presentation center, retaining their source UVs, clipping, color/material, depth and draw order. Background, world geometry, input inverse, real aim target and world reticles are unchanged.100% preserves the former output. Small view, boot/Service and full composed native-raster fallback remain100%. The original HUD layout and full-original small-view behavior are preserved; this does not reintroduce source cropping at a larger size.
+
+Production GL regressions measure both status-mesh and foreground pixel areas at50/100/200%, stable world pixels, unmodified aim depth, both-eye parallax, inactive/small-view/fallback no-op and repeated pass transitions. Actual menu input checks cover5% increments, both clamps, shifted actions, Reset confirmation, accepted native defaults and settings reload. Source/build/install results, exact hashes and limitations are recorded in `overseer/changes/2026-10-30-hud-size/` and its BEL subfolder. Physical visibility/comfort and sustained performance are separate checks; no GitHub publication is authorized or performed by this work.

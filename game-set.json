@@ -1,0 +1,265 @@
+{
+  "set": "bel",
+  "title": "Behind Enemy Lines",
+  "hardware": "Model 2C",
+  "commit": "f34f02505e32c1993c6a782b6814232cbfc74e36",
+  "driver_status": {
+    "status": "preliminary",
+    "emulation": "preliminary",
+    "savestate": "unsupported",
+    "requiresartwork": "no",
+    "unofficial": "no",
+    "nosoundhardware": "no",
+    "incomplete": "no"
+  },
+  "files": [
+    {
+      "name": "epr-20225.15",
+      "size": 131072,
+      "crc32": "4abc6b59",
+      "sha1": "cc6da75aafcbbc86720435182a66e8de065c8e99",
+      "group": "game",
+      "region": "maincpu"
+    },
+    {
+      "name": "epr-20226.16",
+      "size": 131072,
+      "crc32": "43e05b3a",
+      "sha1": "204b3cc6bbfdc92b4871c45fe4abff4ab4a66317",
+      "group": "game",
+      "region": "maincpu"
+    },
+    {
+      "name": "epr-20223.13",
+      "size": 131072,
+      "crc32": "61b1be98",
+      "sha1": "03c308c58a72bf3b78f41d5a9c0adaa7aad631c2",
+      "group": "game",
+      "region": "maincpu"
+    },
+    {
+      "name": "epr-20224.14",
+      "size": 131072,
+      "crc32": "eb2d7dbf",
+      "sha1": "f3b126e2fcef1cf673b239696ed8018241b1170e",
+      "group": "game",
+      "region": "maincpu"
+    },
+    {
+      "name": "mpr-20233.11",
+      "size": 2097152,
+      "crc32": "3e079a3b",
+      "sha1": "a3f15cd68a514cf80f0a40dbbb08e8b0489a0e4b",
+      "group": "game",
+      "region": "main_data"
+    },
+    {
+      "name": "mpr-20234.12",
+      "size": 2097152,
+      "crc32": "58bde826",
+      "sha1": "386d0d07738f579cb23e4168aceb26f56bcca1c1",
+      "group": "game",
+      "region": "main_data"
+    },
+    {
+      "name": "mpr-20231.9",
+      "size": 2097152,
+      "crc32": "b3393e93",
+      "sha1": "aa52ae307aa37faaaf86c326642af1946c5f4056",
+      "group": "game",
+      "region": "main_data"
+    },
+    {
+      "name": "mpr-20232.10",
+      "size": 2097152,
+      "crc32": "da4a2e11",
+      "sha1": "f9138813f6d1ca2126f5de10d8d69dcbb533aa0e",
+      "group": "game",
+      "region": "main_data"
+    },
+    {
+      "name": "mpr-20229.7",
+      "size": 2097152,
+      "crc32": "cdec7bf4",
+      "sha1": "510b6d41f1d32a9929379ba76037db137164cd43",
+      "group": "game",
+      "region": "main_data"
+    },
+    {
+      "name": "mpr-20230.8",
+      "size": 2097152,
+      "crc32": "a166fa87",
+      "sha1": "d4f6d4fba7f43b21f0bf9d948ec93b372425bf7c",
+      "group": "game",
+      "region": "main_data"
+    },
+    {
+      "name": "mpr-20227.5",
+      "size": 2097152,
+      "crc32": "1277686e",
+      "sha1": "fff27006659458300001425261b944e690f1d494",
+      "group": "game",
+      "region": "main_data"
+    },
+    {
+      "name": "mpr-20228.6",
+      "size": 2097152,
+      "crc32": "49cb5568",
+      "sha1": "ee3273302830f3499c7d4e548b629c51e0369e8a",
+      "group": "game",
+      "region": "main_data"
+    },
+    {
+      "name": "mpr-20236.29",
+      "size": 2097152,
+      "crc32": "8de9a3c2",
+      "sha1": "e7fde1fd509531e1002ff813163067dc0d134536",
+      "group": "game",
+      "region": "copro_data"
+    },
+    {
+      "name": "mpr-20235.30",
+      "size": 2097152,
+      "crc32": "78fa11ef",
+      "sha1": "a60deabb662e9c09f5d6342dc1a1c6045744d93f",
+      "group": "game",
+      "region": "copro_data"
+    },
+    {
+      "name": "mpr-20244.17",
+      "size": 2097152,
+      "crc32": "9d2a8660",
+      "sha1": "59302e7119c9ff779ce0c871713fe3688c29cccb",
+      "group": "game",
+      "region": "polygons"
+    },
+    {
+      "name": "mpr-20240.21",
+      "size": 2097152,
+      "crc32": "51615908",
+      "sha1": "c70252b0b6f17aa0cd9b5264d4166df8ab7d1784",
+      "group": "game",
+      "region": "polygons"
+    },
+    {
+      "name": "mpr-20243.18",
+      "size": 2097152,
+      "crc32": "48671f7c",
+      "sha1": "b0bdc7f42450c8d9cebbcf43cf858f7399e378e4",
+      "group": "game",
+      "region": "polygons"
+    },
+    {
+      "name": "mpr-20239.22",
+      "size": 2097152,
+      "crc32": "6cd8d8a5",
+      "sha1": "1c634fbbcbafb1c3825117682901a3264599b246",
+      "group": "game",
+      "region": "polygons"
+    },
+    {
+      "name": "mpr-20242.19",
+      "size": 2097152,
+      "crc32": "e7f86ac7",
+      "sha1": "7b7724127b27834eaaa228050ceb779d8a027882",
+      "group": "game",
+      "region": "polygons"
+    },
+    {
+      "name": "mpr-20238.23",
+      "size": 2097152,
+      "crc32": "0a480c7c",
+      "sha1": "239d2c9c49cb8ddc0d6aa956a497b494217f38d7",
+      "group": "game",
+      "region": "polygons"
+    },
+    {
+      "name": "mpr-20241.20",
+      "size": 2097152,
+      "crc32": "51974b98",
+      "sha1": "7d6ab9c0ccec77676222611bf200d2e067e20520",
+      "group": "game",
+      "region": "polygons"
+    },
+    {
+      "name": "mpr-20237.24",
+      "size": 2097152,
+      "crc32": "89b5d8b6",
+      "sha1": "6e0a0323d6a804f1f1e4404694cc1ea7dfbf2d95",
+      "group": "game",
+      "region": "polygons"
+    },
+    {
+      "name": "mpr-20247.27",
+      "size": 2097152,
+      "crc32": "00b0417d",
+      "sha1": "5e9d38509c1e5273079a342a64ca2c956cd47e6d",
+      "group": "game",
+      "region": "textures"
+    },
+    {
+      "name": "mpr-20245.25",
+      "size": 2097152,
+      "crc32": "36490a08",
+      "sha1": "a462e094c9a9ec4743e4bf2c4ce23357257a2a54",
+      "group": "game",
+      "region": "textures"
+    },
+    {
+      "name": "mpr-20248.28",
+      "size": 2097152,
+      "crc32": "0ace6bef",
+      "sha1": "a231aeb7b984f5b927144f0eec4ef2282429494f",
+      "group": "game",
+      "region": "textures"
+    },
+    {
+      "name": "mpr-20246.26",
+      "size": 2097152,
+      "crc32": "250d6ca1",
+      "sha1": "cd1d4bc0fcf89e47884b87863a09bb263bce72cc",
+      "group": "game",
+      "region": "textures"
+    },
+    {
+      "name": "mpr-20249.31",
+      "size": 131072,
+      "crc32": "dc24f13d",
+      "sha1": "66ab8e843319d07663ef13f3d2299c6c7414071f",
+      "group": "game",
+      "region": "audiocpu"
+    },
+    {
+      "name": "mpr-20250.32",
+      "size": 2097152,
+      "crc32": "91b735d3",
+      "sha1": "b0e7e493fb20ebf30c17378199e49d529ffb3f20",
+      "group": "game",
+      "region": "samples"
+    },
+    {
+      "name": "mpr-20251.33",
+      "size": 2097152,
+      "crc32": "703a947b",
+      "sha1": "95b8d3dc29e87e6537b288d8e946728e0b345dd0",
+      "group": "game",
+      "region": "samples"
+    },
+    {
+      "name": "mpr-20252.34",
+      "size": 2097152,
+      "crc32": "8f48f375",
+      "sha1": "9e511e89e99c77f06a5fba033ca8f9b98bd86f91",
+      "group": "game",
+      "region": "samples"
+    },
+    {
+      "name": "mpr-20253.35",
+      "size": 2097152,
+      "crc32": "ca6aa17c",
+      "sha1": "f6df2483ca75573449ba36638dbbed4be7843a44",
+      "group": "game",
+      "region": "samples"
+    }
+  ]
+}
