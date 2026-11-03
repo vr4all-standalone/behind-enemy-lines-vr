@@ -19,6 +19,7 @@ inline Settings read_settings(std::istream& input,bool* migrated=nullptr) {
         else if(key=="p1_hand"&&integer(0,1)){has_hand=true;selected_hand=int(number);}
         else if(key=="gun"&&integer(0,1))out.gun=int(number);
         else if(key=="laser"&&integer(0,1))out.laser=number!=0;
+        else if(key=="laser_width"&&integer(1,3))out.laser_width=number;
         else if(key=="wider_view"&&integer(0,1)){has_wider=true;selected_wider=number!=0;}
         else if(key=="background"&&integer(0,1))out.background=BackgroundMode(int(number));
         else if(key=="view_fov"&&number>=35&&number<=95)out.view_fov=float(number);
@@ -48,12 +49,13 @@ inline Settings read_settings(std::istream& input,bool* migrated=nullptr) {
     if(!has_wide_scale&&out.world_scale!=.1f)out.wide_world_scale=out.world_scale;
     if(version<6&&out.wide_world_scale==.3f)out.wide_world_scale=Settings{}.wide_world_scale;
     if(!has_reticle_distance&&version<7&&has_panel_distance)out.reticle_shrink_distance=out.panel_distance;
-    if(migrated)*migrated=version<7||!angle_zero_version;
+    if(version<8&&!out.wider_view)out.wide_world_scale=out.world_scale;
+    if(migrated)*migrated=version<8||!angle_zero_version;
     if(!has_custom_min&&has_ingame_min)out.reticle_custom_min_size=out.reticle_min_size;
     return out;
 }
 inline void write_settings(std::ostream& out,const Settings& s) {
-    out<<"version=7\ngun_angle_zero_version=1\np1_hand="<<s.p1_hand<<"\ngun="<<(s.gun==1?1:0)<<"\nlaser="<<s.laser
-       <<"\nview_fov="<<s.view_fov<<"\nwider_view="<<s.wider_view<<"\nworld_scale="<<s.world_scale<<"\nwide_world_scale="<<s.wide_world_scale<<"\npanel_distance="<<s.panel_distance<<"\nhud_size="<<s.hud_size<<"\ngun_angle="<<s.gun_angle<<"\ngun_scale="<<s.gun_scale<<"\nreticle_mode="<<int(s.reticle_mode)<<"\nreticle_min_size="<<s.reticle_min_size<<"\nreticle_max_size="<<s.reticle_max_size<<"\nreticle_custom_min_size="<<s.reticle_custom_min_size<<"\nreticle_custom_max_size="<<s.reticle_custom_max_size<<"\nreticle_shrink_distance="<<s.reticle_shrink_distance<<"\nhaptics="<<s.haptics<<"\nbackground="<<int(s.background)<<'\n';
+    out<<"version=8\ngun_angle_zero_version=1\np1_hand="<<s.p1_hand<<"\ngun="<<(s.gun==1?1:0)<<"\nlaser="<<s.laser
+       <<"\nlaser_width="<<s.laser_width<<"\nview_fov="<<s.view_fov<<"\nwider_view="<<s.wider_view<<"\nworld_scale="<<s.world_scale<<"\nwide_world_scale="<<s.wide_world_scale<<"\npanel_distance="<<s.panel_distance<<"\nhud_size="<<s.hud_size<<"\ngun_angle="<<s.gun_angle<<"\ngun_scale="<<s.gun_scale<<"\nreticle_mode="<<int(s.reticle_mode)<<"\nreticle_min_size="<<s.reticle_min_size<<"\nreticle_max_size="<<s.reticle_max_size<<"\nreticle_custom_min_size="<<s.reticle_custom_min_size<<"\nreticle_custom_max_size="<<s.reticle_custom_max_size<<"\nreticle_shrink_distance="<<s.reticle_shrink_distance<<"\nhaptics="<<s.haptics<<"\nbackground="<<int(s.background)<<'\n';
 }
 }

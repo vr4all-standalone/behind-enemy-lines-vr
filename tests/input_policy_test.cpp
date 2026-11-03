@@ -48,11 +48,11 @@ int main() {
         assert(c.cabinet.coins==1&&c.cabinet.starts==0);
         c=starts.update(.16,h,native,settings,true,false);assert(c.cabinet.starts==1);
         native.joined_mask=1;c=starts.update(.17,h,native,settings,true,false);
-        assert(c.cabinet.starts==0&&c.cabinet.coins==0);
+        assert(c.hand[0]==0&&c.cabinet.starts==0&&c.cabinet.coins==0);
         c=starts.update(.18,h,native,settings,true,false);assert(c.cabinet.starts==0);
         h[0].start=false;starts.update(.19,h,native,settings,true,false);
-        h[0].start=true;c=starts.update(.2,h,native,settings,true,false);
-        assert(c.cabinet.coins==2); // Layout was reversed earlier: left is P2.
+        h[1].start=true;c=starts.update(.2,h,native,settings,true,false);
+        assert(c.cabinet.coins==2); // Free right hand joins despite the reversed configured layout.
     }
     // A main-gun pull that begins outside cannot become a shot on re-entry.
     {

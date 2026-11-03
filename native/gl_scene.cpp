@@ -95,7 +95,7 @@ void GLScene::prepare(std::shared_ptr<const NativeFrame> frame,bool wider_view) 
     auto& i=*impl_;if(i.frame==frame&&i.wider_view==wider_view)return;
     i.frame=std::move(frame);i.wider_view=wider_view;i.triangles.clear();i.materials.reset();i.reticle.reset();i.vertex_count=0;i.usable=false;if(!i.frame||!i.frame->complete)return;
     const auto& f=*i.frame;i.materials=std::make_unique<Model2Resources>(f);const auto& resource=*i.materials;
-    const bool crop_hud=i.minimal_hud&&wider_view;
+    const bool crop_hud=i.minimal_hud;
     i.triangles=f.rejected==0?scene_triangles(f,wider_view,i.immersive,crop_hud):std::vector<SceneTriangle>{};
     i.usable=resource.valid()&&!i.triangles.empty();
     if(i.usable&&crop_hud)i.reticle=std::make_shared<NativeReticle>(native_reticle(f,resource));
@@ -158,9 +158,9 @@ void GLScene::draw(const glm::mat4& vp,float scale,float distance,float hud_size
     if(!i.usable){i.draw_raster(2,vp,lens,distance);glDepthFunc(GL_LESS);return;}
     // minimal_hud is the host's verified gameplay/non-Service gate. Small view
     // and inactive/native fallback paths keep100% without changing saved size.
-    if(!i.minimal_hud||!i.wider_view||!std::isfinite(hud_size)||hud_size<.5f||hud_size>2.f)hud_size=1.f;
+    if(!i.minimal_hud||!std::isfinite(hud_size)||hud_size<.5f||hud_size>2.f)hud_size=1.f;
     // Native background is a backdrop rather than an opaque depth plane.
-    if(i.immersive||(i.minimal_hud&&i.wider_view))glDepthMask(GL_FALSE);
+    if(i.immersive||i.minimal_hud)glDepthMask(GL_FALSE);
     i.draw_raster(0,vp,lens,distance);
     glDepthMask(GL_TRUE);
     glUseProgram(i.world);glUniformMatrix4fv(i.w.vp,1,GL_FALSE,glm::value_ptr(vp));glUniform4f(i.w.lens,lens.fx,lens.fy,lens.cx,lens.cy);

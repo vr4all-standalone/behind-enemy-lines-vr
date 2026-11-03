@@ -413,7 +413,7 @@ int main() {
         const auto before=hud.trace_aim({{0,0,0},{0,0,-1}},.01f,2.f);
         render(2);const auto after=hud.trace_aim({{0,0,0},{0,0,-1}},.01f,2.f);
         assert(before.target&&after.target&&close(before.target->z,after.target->z)&&close(before.native.u,after.native.u));
-        assert(render(2,false)==render(1,false)&&render(.5f,false)==render(1,false));
+        assert(render(2,false)!=render(1,false)&&render(.5f,false)!=render(1,false)); // Gameplay HUD sizing applies in both views.
         assert(render(2,true,false)==render(1,true,false)); // Service/boot uses the same inactive gate.
         assert(render(1)==normal&&render(.5f)==small&&render(2)==large); // No pass/frame leakage.
         assert(render(.5f,true,true,-.016f)!=render(.5f,true,true,.016f)); // Same HUD plane keeps stereo depth.

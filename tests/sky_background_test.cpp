@@ -41,8 +41,7 @@ int main() {
     changed_native->native.assign(496*384,0xffff00ff);frame=changed_native;
     auto alternate=render(0,true);
     assert(original==alternate); // Healthy 3D presentation does not consume duplicate CPU-world pixels.
-    // Wider view Off must restore the entire original foreground/HUD, even
-    // during gameplay. Compare against the production unfiltered renderer.
+    // Changing the gameplay HUD policy must not alter this narrow sky fixture.
     auto full_hud=std::make_shared<NativeFrame>(f);
     for(int y=280;y<300;y++)for(int x=350;x<400;x++)full_hud->foreground[y*496+x]=0xffff00ff;
     frame=full_hud;scene.set_gameplay_hud(false);auto reference=render(0,false);

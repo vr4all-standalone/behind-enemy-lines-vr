@@ -191,6 +191,7 @@ struct Host {
 #endif
     Settings settings;InputPolicy policy;ShortcutPolicy shortcuts;OperatorPolicy operator_controls;ServiceGunPolicy service_guns;MenuHoldPolicy menu_hold_policy;ButtonLatch service_click;glm::mat4 head_pose{1};
     BurstFeedback burst_feedback;
+    ReticleMode last_crosshair{ReticleMode::Ingame};
     Host(SharedRuntime& s):shared(s){
         const char* file=std::getenv("BEL_SETTINGS");const char* path=file?file:"bel-settings.ini";
         std::ifstream input(path);
@@ -342,7 +343,10 @@ struct Host {
             if(palm.locationFlags&XR_SPACE_LOCATION_POSITION_VALID_BIT)display.grips[i]=glm::vec3(inv*glm::vec4(palm.pose.position.x,palm.pose.position.y,palm.pose.position.z,1));
             XrActionStateGetInfo sg{XR_TYPE_ACTION_STATE_GET_INFO};sg.action=stick;sg.subactionPath=hands[i];XrActionStateVector2f stick_state{XR_TYPE_ACTION_STATE_VECTOR2F};check(xrGetActionStateVector2f(session,&sg,&stick_state),"Stick state");
             if(stick_state.isActive&&std::abs(stick_state.currentState.x)+std::abs(stick_state.currentState.y)>std::abs(display.stick.x)+std::abs(display.stick.y))display.stick={stick_state.currentState.x,stick_state.currentState.y};
-            if(stick_state.isActive)extras.stick[i]={stick_state.currentState.x,stick_state.currentState.y};
+            if(stick_state.isActive){
+                extras.stick[i]={stick_state.currentState.x,stick_state.currentState.y};
+                display.sticks[i]={stick_state.currentState.x,stick_state.currentState.y};
+            }
             XrActionStateGetInfo gg{XR_TYPE_ACTION_STATE_GET_INFO};gg.action=grip;gg.subactionPath=hands[i];XrActionStateFloat squeezed{XR_TYPE_ACTION_STATE_FLOAT};check(xrGetActionStateFloat(session,&gg,&squeezed),"Grip state");
             extras.grip[i]=squeezed.isActive&&squeezed.currentState>.7f;extras.click[i]=button(click,i);
             if(h.tracked&&frame&&frame->complete) {
@@ -359,9 +363,14 @@ struct Host {
         if(service_click.edge(extras.click[1],focused&&ui.service()&&!ui.open())){ui.toggle_service_guns();shared.release_inputs();}
         auto shortcut=shortcuts.update(now,extras,inputs,settings,focused&&!ui.open()&&!ui.service());
         if(shortcut.recenter)origin_set=false;
-        if(shortcut.laser)settings.laser=!settings.laser;
+        if(shortcut.laser){
+            const bool enabled=!(settings.laser||settings.reticle_mode!=ReticleMode::None);
+            settings.laser=enabled;
+            if(settings.reticle_mode!=ReticleMode::None)last_crosshair=settings.reticle_mode;
+            settings.reticle_mode=enabled?last_crosshair:ReticleMode::None;
+        }
         if(shortcut.save||shortcut.laser){const char* file=std::getenv("BEL_SETTINGS");std::ofstream output(file?file:"bel-settings.ini");if(output)write_settings(output,settings);}
-        if(extras.grip[0]||extras.grip[1])display.stick={};
+        if(extras.grip[0]||extras.grip[1]){display.stick={};display.sticks={};}
         const auto native=shared.native_snapshot();const auto& state=native.state;
         display.hands=inputs;display.focused=focused;ui.update(display,settings,shared,now);
         shared.service_active=ui.service();

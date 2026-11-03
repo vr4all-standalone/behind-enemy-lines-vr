@@ -236,16 +236,20 @@ int main(int argc,char** argv){
         // Drive the actual rows and save/reset paths, including the shifted
         // actions after HUD size. Stick movement alone must not confirm Reset.
         Presentation options_menu;Settings chosen;SharedRuntime own;PresentationInput controls;double now=20;
-        auto step=[&](glm::vec2 stick){controls.stick=stick;now+=.5;options_menu.update(controls,chosen,own,now);};
+        controls.hands[0].tracked=true;controls.poses[0][3].x=10;
+        auto step=[&](glm::vec2 stick){controls.sticks[0]=stick;now+=.5;options_menu.update(controls,chosen,own,now);};
         step({0,0});controls.toggle=true;step({0,0});controls.toggle=false;step({0,0});
-        for(int row=0;row<14;row++){step({0,-1});step({0,0});}
+        auto press=[&](){controls.hands[0].start=true;step({0,0});controls.hands[0].start=false;step({0,0});};
+        step({0,1});step({1,0});step({0,-1});step({0,-1});press();
+        step({0,-1});step({0,-1});
         step({1,0});step({0,0});check(std::abs(chosen.hud_size-1.25f)<.0001f,"HUD size row changes only its saved percentage in5% steps");
         for(int i=0;i<50;i++){step({1,0});step({0,0});}check(chosen.hud_size==2,"HUD size clamps at200%");
         for(int i=0;i<50;i++){step({-1,0});step({0,0});}check(chosen.hud_size==.5f,"HUD size clamps at50%");
         chosen.hud_size=1.75f;chosen.wider_view=false;
-        for(int row=14;row<20;row++){step({0,-1});step({0,0});}
+        for(int row=0;row<3;row++){step({0,1});step({0,0});}press();
+        step({0,1});step({1,0});for(int row=0;row<4;row++){step({0,-1});step({0,0});}
         step({1,0});step({0,0});check(chosen.hud_size==1.75f&&!chosen.wider_view,"horizontal navigation cannot confirm Reset to defaults");
-        controls.hands[0].start=true;step({0,0});controls.hands[0].start=false;step({0,0});
+        press();step({0,-1});step({0,0});press();
         check(chosen.hud_size==1.2f&&chosen.wider_view&&chosen.reticle_min_size==.35f&&chosen.reticle_max_size==1.45f&&chosen.reticle_shrink_distance==10.f&&options_menu.open(),"Reset restores captured BEL reticle and HUD defaults while keeping menu open");
         if(const char* path=std::getenv("BEL_SETTINGS")){std::ifstream saved(path);check(saved.good()&&read_settings(saved).hud_size==1.2f,"Reset HUD default survives production settings reload");}
     }

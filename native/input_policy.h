@@ -6,16 +6,11 @@ namespace bel {
 struct Aim {double u{.5},v{.5};bool valid{},inside{};};
 struct HandInput {bool tracked{},trigger{},start{},pump{};Aim aim;};
 using Hands=std::array<HandInput,2>; // Left, right.
-inline int start_player_for_hand(int hand,int p1_hand,uint8_t joined,const Hands& hands) {
-    joined&=3;
-    if(!joined)return 0;
-    if(joined!=3&&hands[0].tracked!=hands[1].tracked)return joined==2?1:0;
-    return hand==(p1_hand==0?0:1)?0:1;
-}
 enum class BackgroundMode {Original,Depth3D};
 inline constexpr std::array<float,4> HapticLevels{0,.35f,.65f,1};
 inline int haptic_level(float value){int best=0;for(int i=1;i<4;i++)if(std::abs(value-HapticLevels[i])<std::abs(value-HapticLevels[best]))best=i;return best;}
 struct Settings {
+    int laser_width{1}; // Normal, 5x, 10x
     int p1_hand{0};std::array<Calibration,2> calibration=NativeRanges;
     float world_scale{.1f},wide_world_scale{.830f},panel_distance{1.8f},gun_angle{},gun_scale{1},haptics{.65f},view_fov{65};
     float reticle_min_size{.35f},reticle_max_size{1.45f},reticle_custom_min_size{.30f},reticle_custom_max_size{1.f},reticle_shrink_distance{10.f};ReticleMode reticle_mode{ReticleMode::Ingame};
@@ -23,8 +18,8 @@ struct Settings {
     bool laser{true},wider_view{true};int gun{};
     BackgroundMode background{BackgroundMode::Original};
 };
-inline float& active_world_scale(Settings& s){return s.wider_view?s.wide_world_scale:s.world_scale;}
-inline float active_world_scale(const Settings& s){return s.wider_view?s.wide_world_scale:s.world_scale;}
+inline float& active_world_scale(Settings& s){return s.wide_world_scale;}
+inline float active_world_scale(const Settings& s){return s.wide_world_scale;}
 // Populate only from separately verified native observations. In particular,
 // physical trigger state must never stand in for an accepted native shot.
 struct NativeState {
@@ -96,10 +91,13 @@ class InputPolicy {
     std::array<int,2> start_owner_{-1,-1};
     bool initialized_{},was_enabled_{},was_ready_{};
     uint8_t previous_joined_{};
-    int previous_layout_{0},solo_hand_{0};
+    int previous_layout_{0},solo_hand_{-1};
     double previous_time_{};
 public:
-    void suspend(){*this=InputPolicy{};}
+    void suspend(){
+        const int owner=solo_hand_,layout=previous_layout_;const auto joined=previous_joined_;
+        *this=InputPolicy{};solo_hand_=owner;previous_layout_=layout;previous_joined_=joined;
+    }
     template<class State> CabinetInput update(double now,const Hands& hands,const State& state,
                         const Settings& settings,bool focused,bool menu,const ShotOwnership* ownership=nullptr) {
         NativeState native;native.valid=state.valid;native.start_ready=state.ready;
@@ -127,7 +125,7 @@ public:
         const bool session_changed=initialized_&&state.session!=previous_state_.session;
         const bool transition=!initialized_||enabled!=was_enabled_||joined!=previous_joined_||layout!=previous_layout_||session_changed||state.fire_ready!=previous_state_.fire_ready;
         if(transition){blocked_={true,true};outside_pull_={};missile_blocked_={true,true};missile_outside_pull_={};}
-        if(!initialized_||layout!=previous_layout_)solo_hand_=layout;
+        if(solo_hand_<0||layout!=previous_layout_)solo_hand_=joined==2?1-layout:layout;
         if(joined==3)solo_hand_=layout;
         else if(previous_joined_==3 && joined==2)solo_hand_=1-layout;
         const int previous_solo=solo_hand_;
@@ -135,6 +133,10 @@ public:
             const int other=1-solo_hand_;
             if(!hands[solo_hand_].trigger&&hands[other].tracked&&
                (!hands[solo_hand_].tracked || (hands[other].trigger&&!previous_[other].trigger&&!transition)))solo_hand_=other;
+        }
+        if(joined==0&&ready&&was_ready_&&layout==previous_layout_&&!session_changed){
+            const auto first=[&](int h){return hands[h].tracked&&!start_waiting_[h]&&hands[h].start&&!previous_[h].start;};
+            if(first(0)||first(1))solo_hand_=first(0)&&first(1)?layout:first(0)?0:1;
         }
         if(solo_hand_!=previous_solo&&previous_[solo_hand_].trigger)blocked_[solo_hand_]=true;
         if(solo_hand_!=previous_solo)missile_blocked_={true,true};
@@ -162,7 +164,8 @@ public:
             if(ready&&in.tracked&&!in.start)start_waiting_[h]=false;
             if(!in.start)start_owner_[h]=-1;
             if(ready&&in.tracked&&!start_waiting_[h]&&in.start&&!previous_[h].start) {
-                const int player=start_player_for_hand(h,layout,joined,hands);
+                const int active=joined==2?1:0;
+                const int player=joined==0?0:joined==3?(h==layout?0:1):(h==solo_hand_?active:1-active);
                 if(player==0 || (joined&(1<<player)) || ((joined&1)&&hands[0].tracked&&hands[1].tracked)) {
                     start_owner_[h]=player;
                     auto& pulse=pulses_[h];

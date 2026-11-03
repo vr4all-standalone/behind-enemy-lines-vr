@@ -20,7 +20,7 @@ int main(){
     std::istringstream current("wider_view=0\nversion=2\n");
     auto selected=read_settings(current);assert(!selected.wider_view);
     std::ostringstream output;write_settings(output,selected);
-    assert(output.str().find("version=7\n")==0);
+    assert(output.str().find("version=8\n")==0);
     std::istringstream roundtrip(output.str());assert(!read_settings(roundtrip).wider_view);
     std::istringstream invalid("version=2\nwider_view=nan\n");
     assert(read_settings(invalid).wider_view);
@@ -32,7 +32,7 @@ int main(){
     std::ostringstream reversed;write_settings(reversed,hand_migration);
     std::istringstream reloaded(reversed.str());
     assert(read_settings(reloaded).p1_hand==1);
-    std::istringstream current_hands("p1_hand=1\nversion=7\ngun_angle_zero_version=1\n");
+    std::istringstream current_hands("p1_hand=1\nversion=8\ngun_angle_zero_version=1\n");
     bool upgraded=true;assert(read_settings(current_hands,&upgraded).p1_hand==1&&!upgraded);
     std::istringstream needs_upgrade("version=2\np1_hand=1\n");
     assert(read_settings(needs_upgrade,&upgraded).p1_hand==0&&upgraded);
@@ -49,7 +49,7 @@ int main(){
     view.reticle_mode=ReticleMode::Custom;view.reticle_min_size=.4f;view.reticle_shrink_distance=6.2f;
     std::ostringstream reticle_saved;write_settings(reticle_saved,view);std::istringstream reticle_loaded(reticle_saved.str());
     auto stored=read_settings(reticle_loaded,&upgraded);assert(!upgraded&&stored.reticle_mode==ReticleMode::Custom&&stored.reticle_min_size==.4f&&stored.reticle_shrink_distance==6.2f);
-    std::istringstream malformed("version=7\nreticle_mode=99\nreticle_min_size=nan\nreticle_shrink_distance=-1\n");
+    std::istringstream malformed("version=8\nreticle_mode=99\nreticle_min_size=nan\nreticle_shrink_distance=-1\n");
     auto safe=read_settings(malformed);assert(safe.reticle_mode==ReticleMode::Ingame&&safe.reticle_min_size==.35f&&safe.reticle_shrink_distance==10.f);
     assert(Settings{}.hud_size==1.2f);
     for(const char* text:{"hud_size=nan\n","hud_size=inf\n","hud_size=0.49\n","hud_size=2.01\n","hud_size=no\n",""}){
